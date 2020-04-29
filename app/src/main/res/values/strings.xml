@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">HotSearch</string>
+
+    <string name="tab_text_1">微博</string>
+    <string name="tab_text_2">百度</string>
+    <string name="tab_text_3">抖音</string>
+    <string name="tab_text_4">V2EX</string>
+
+    <string name="is_new">新</string>
+    <string name="dot">%d.</string>
+    <string name="update">更新于: %s</string>
+    <string name="v2ex">好像已经更新了</string>
+</resources>

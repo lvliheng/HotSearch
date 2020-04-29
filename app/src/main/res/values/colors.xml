@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#333333</color>
+    <color name="colorPrimaryDark">#333333</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorButtonBg">#c2c2c2</color>
+
+    <color name="red_color">#FF0000</color>
+    <color name="white_color">#FFFFFF</color>
+    <color name="searches_color">#4289c6</color>
+    <color name="main_bg">#333333</color>
+    <color name="item_pressed">#2c2c2c</color>
+
+    <color name="first">#f15a24</color>
+    <color name="second">#f7931e</color>
+    <color name="third">#fbb03b</color>
+    <color name="others">#ffdb46</color>
+
+
+</resources>
