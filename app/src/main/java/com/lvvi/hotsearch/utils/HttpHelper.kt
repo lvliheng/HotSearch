@@ -129,7 +129,7 @@ class HttpHelper private constructor() {
         private const val FAIL_MSG = "网络异常"
         private const val ERROR_MSG = "数据异常"
 
-        private const val CONNECT_TIMEOUT = 60
+        private const val CONNECT_TIMEOUT = 15
 
 
         private var httpHelper: HttpHelper? = null

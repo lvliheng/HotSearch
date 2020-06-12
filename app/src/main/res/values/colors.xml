@@ -6,16 +6,23 @@
 
     <color name="colorButtonBg">#c2c2c2</color>
 
-    <color name="red_color">#FF0000</color>
-    <color name="white_color">#FFFFFF</color>
+    <color name="red">#FF0000</color>
+    <color name="ghost_white">#F5F5F5</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
     <color name="searches_color">#4289c6</color>
     <color name="main_bg">#333333</color>
-    <color name="item_pressed">#2c2c2c</color>
+    <color name="item_pressed">#222C2F</color>
+    <color name="header_bg">#222222</color>
 
     <color name="first">#f15a24</color>
     <color name="second">#f7931e</color>
     <color name="third">#fbb03b</color>
     <color name="others">#ffdb46</color>
 
+    <color name="pic_index">#cc333333</color>
+    <color name="pager_index">#cc000000</color>
+    <color name="cardview_dark_bg">#ff424242</color>
+    <color name="reply_name">#fdf5e6</color>
 
 </resources>

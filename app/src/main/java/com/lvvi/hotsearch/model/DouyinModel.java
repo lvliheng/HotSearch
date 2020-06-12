@@ -1,4 +1,4 @@
-package com.lvvi.hotsearch.ui.douyin;
+package com.lvvi.hotsearch.model;
 
 import java.util.List;
 
@@ -901,6 +901,9 @@ public class DouyinModel {
                 private int height;
                 private DynamicCoverBean dynamic_cover;
                 private OriginCoverBean origin_cover;
+                private String url;
+                private boolean isSelected;
+                private boolean isPlaying;
 
                 public String getVid() {
                     return vid;
@@ -988,6 +991,30 @@ public class DouyinModel {
 
                 public void setOrigin_cover(OriginCoverBean origin_cover) {
                     this.origin_cover = origin_cover;
+                }
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+
+                public boolean isSelected() {
+                    return isSelected;
+                }
+
+                public void setSelected(boolean selected) {
+                    isSelected = selected;
+                }
+
+                public boolean isPlaying() {
+                    return isPlaying;
+                }
+
+                public void setPlaying(boolean playing) {
+                    isPlaying = playing;
                 }
 
                 public static class PlayAddrBean {

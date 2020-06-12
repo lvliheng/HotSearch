@@ -1,4 +1,4 @@
-package com.lvvi.hotsearch.ui.weibo;
+package com.lvvi.hotsearch.model;
 
 import java.util.List;
 
@@ -804,13 +804,25 @@ public class WeiboModel {
                  */
 
                 private int card_type;
+                private String type;
                 private String pic;
                 private String itemid;
-                private ActionlogBeanXX actionlog;
                 private String scheme;
                 private String desc;
                 private String icon;
                 private String desc_extr;
+
+                private String isDetailShow;
+                private String detailText;
+                private String pagePic;
+                private String pageTitle;
+                private String pageUrl;
+                private String pageTypeIcon;
+                private String videoUrl;
+                private int duration;
+                private List<WeiboDetailModel.DataBean.CardsBean.MblogBean.PicsBean> pics;
+
+                private String objectId;
 
                 public int getCard_type() {
                     return card_type;
@@ -818,6 +830,14 @@ public class WeiboModel {
 
                 public void setCard_type(int card_type) {
                     this.card_type = card_type;
+                }
+
+                public String getType() {
+                    return type;
+                }
+
+                public void setType(String type) {
+                    this.type = type;
                 }
 
                 public String getPic() {
@@ -836,13 +856,6 @@ public class WeiboModel {
                     this.itemid = itemid;
                 }
 
-                public ActionlogBeanXX getActionlog() {
-                    return actionlog;
-                }
-
-                public void setActionlog(ActionlogBeanXX actionlog) {
-                    this.actionlog = actionlog;
-                }
 
                 public String getScheme() {
                     return scheme;
@@ -861,7 +874,7 @@ public class WeiboModel {
                 }
 
                 public String getIcon() {
-                    return icon;
+                    return icon == null ? "" : icon;
                 }
 
                 public void setIcon(String icon) {
@@ -869,77 +882,91 @@ public class WeiboModel {
                 }
 
                 public String getDesc_extr() {
-                    return desc_extr;
+                    return desc_extr == null ? "" : desc_extr;
                 }
 
                 public void setDesc_extr(String desc_extr) {
                     this.desc_extr = desc_extr;
                 }
 
-                public static class ActionlogBeanXX {
-                    /**
-                     * act_code : 554
-                     * ext : t:51|pos:0_0|c_type:51|cate:10113|page:1|type:25
-                     * luicode :
-                     * fid : 106003type=25&t=3&disable_hot=1&filter_type=realtimehot
-                     * lfid :
-                     * uicode : 10000003
-                     */
+                public String getIsDetailShow() {
+                    return isDetailShow;
+                }
 
-                    private int act_code;
-                    private String ext;
-                    private String luicode;
-                    private String fid;
-                    private String lfid;
-                    private int uicode;
+                public void setIsDetailShow(String isDetailShow) {
+                    this.isDetailShow = isDetailShow;
+                }
 
-                    public int getAct_code() {
-                        return act_code;
-                    }
+                public String getDetailText() {
+                    return detailText;
+                }
 
-                    public void setAct_code(int act_code) {
-                        this.act_code = act_code;
-                    }
+                public void setDetailText(String detailText) {
+                    this.detailText = detailText;
+                }
 
-                    public String getExt() {
-                        return ext;
-                    }
+                public String getPagePic() {
+                    return pagePic;
+                }
 
-                    public void setExt(String ext) {
-                        this.ext = ext;
-                    }
+                public void setPagePic(String pagePic) {
+                    this.pagePic = pagePic;
+                }
 
-                    public String getLuicode() {
-                        return luicode;
-                    }
+                public String getPageTitle() {
+                    return pageTitle;
+                }
 
-                    public void setLuicode(String luicode) {
-                        this.luicode = luicode;
-                    }
+                public void setPageTitle(String pageTitle) {
+                    this.pageTitle = pageTitle;
+                }
 
-                    public String getFid() {
-                        return fid;
-                    }
+                public String getPageUrl() {
+                    return pageUrl;
+                }
 
-                    public void setFid(String fid) {
-                        this.fid = fid;
-                    }
+                public void setPageUrl(String pageUrl) {
+                    this.pageUrl = pageUrl;
+                }
 
-                    public String getLfid() {
-                        return lfid;
-                    }
+                public String getPageTypeIcon() {
+                    return pageTypeIcon;
+                }
 
-                    public void setLfid(String lfid) {
-                        this.lfid = lfid;
-                    }
+                public void setPageTypeIcon(String pageTypeIcon) {
+                    this.pageTypeIcon = pageTypeIcon;
+                }
 
-                    public int getUicode() {
-                        return uicode;
-                    }
+                public int getDuration() {
+                    return duration;
+                }
 
-                    public void setUicode(int uicode) {
-                        this.uicode = uicode;
-                    }
+                public void setDuration(int duration) {
+                    this.duration = duration;
+                }
+
+                public String getVideoUrl() {
+                    return videoUrl;
+                }
+
+                public void setVideoUrl(String videoUrl) {
+                    this.videoUrl = videoUrl;
+                }
+
+                public List<WeiboDetailModel.DataBean.CardsBean.MblogBean.PicsBean> getPics() {
+                    return pics;
+                }
+
+                public void setPics(List<WeiboDetailModel.DataBean.CardsBean.MblogBean.PicsBean> pics) {
+                    this.pics = pics;
+                }
+
+                public String getObjectId() {
+                    return objectId;
+                }
+
+                public void setObjectId(String objectId) {
+                    this.objectId = objectId;
                 }
             }
         }

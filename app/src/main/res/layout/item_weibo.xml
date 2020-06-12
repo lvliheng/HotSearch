@@ -1,40 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:background="@drawable/item_bg_selector"
-    android:layout_height="40dp">
-
-    <ImageView
-        android:id="@+id/index_iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"/>
+    android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/title_tv"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:lines="1"
-        android:ellipsize="end"
-        android:textColor="@color/white_color"
+        android:id="@+id/update_time_tv"
+        android:layout_width="match_parent"
         android:textSize="16sp"
-        android:gravity="center_vertical"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/desc_extr_tv"
-        android:layout_width="wrap_content"
-        android:textSize="14sp"
         android:textColor="@color/colorButtonBg"
-        android:layout_height="wrap_content"/>
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="center_vertical"
+        android:layout_height="40dp"/>
 
-    <ImageView
-        android:id="@+id/emoji_iv"
-        android:layout_width="30dp"
-        android:layout_height="30dp"/>
-</LinearLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_below="@+id/update_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@color/cardview_dark_bg"
+        android:clipChildren="false"
+        android:foreground="?android:selectableItemBackground"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="2dp"
+        card_view:cardPreventCornerOverlap="true"
+        card_view:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:id="@+id/main_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/main_bg"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/title_ll"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+                <ImageView
+                    android:id="@+id/index_iv"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/ghost_white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/hot_value_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:textColor="@color/colorButtonBg"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/emoji_iv"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/app_name" />
+
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:id="@+id/detail_layout"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:background="@color/item_pressed"
+                android:paddingBottom="10dp"
+                android:scrollbars="none"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:id="@+id/media_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    tools:ignore="WebViewLayout">
+
+                    <WebView
+                        android:id="@+id/weibo_detail_webview"
+                        android:layout_width="381dp"
+                        android:layout_height="200dp"
+                        android:background="@android:color/transparent"
+                        android:visibility="invisible"
+                        tools:ignore="WebViewLayout" />
+
+                    <VideoView
+                        android:id="@+id/video_vv"
+                        android:layout_toEndOf="@+id/weibo_detail_webview"
+                        android:layout_width="411dp"
+                        android:layout_height="200dp"
+                        android:visibility="gone"
+                        android:transitionName="video_transition" />
+
+                    <RelativeLayout
+                        android:id="@+id/pic_layout"
+                        android:layout_toEndOf="@+id/weibo_detail_webview"
+                        android:layout_width="411dp"
+                        android:layout_height="200dp">
+
+                        <ImageView
+                            android:id="@+id/pic_iv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="200dp"
+                            android:visibility="gone"
+                            android:contentDescription="@string/app_name" />
+
+                        <TextView
+                            android:id="@+id/pic_count_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:background="@color/pic_index"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            android:textColor="@color/ghost_white" />
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+            </HorizontalScrollView>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
+
+

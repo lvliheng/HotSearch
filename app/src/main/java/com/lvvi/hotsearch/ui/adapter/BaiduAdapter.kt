@@ -1,4 +1,4 @@
-package com.lvvi.hotsearch.ui.baidu
+package com.lvvi.hotsearch.ui.adapter
 
 import android.content.Context
 import android.os.Message
@@ -9,6 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.lvvi.hotsearch.R
+import com.lvvi.hotsearch.ui.baidu.BaiduFragment
+import com.lvvi.hotsearch.model.BaiduModel
+import com.lvvi.hotsearch.utils.API
+import com.lvvi.hotsearch.utils.Constant
 import kotlinx.android.synthetic.main.item_baidu.view.*
 
 class BaiduAdapter() :
@@ -40,6 +44,14 @@ class BaiduAdapter() :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (position == 0) {
+            holder.update.visibility = View.VISIBLE
+            holder.update.text =
+                String.format(context.resources.getString(R.string.update), beans[0].gentime)
+        } else {
+            holder.update.visibility = View.GONE
+        }
+
         when(position){
             0 -> holder.index.setBackgroundResource(R.drawable.index_first_bg)
             1 -> holder.index.setBackgroundResource(R.drawable.index_second_bg)
@@ -66,15 +78,23 @@ class BaiduAdapter() :
 
         holder.itemView.setOnClickListener {
             val message = Message()
-            message.what = BaiduFragment.HANDLER_ITEM_CLICK
-            val scheme = "http://m.baidu.com/s?cl=3&fr=top1000&from=1011885a&sa=fyb_top&word="
-            message.obj = scheme + beans[position].keyword
+            message.what =
+                BaiduFragment.HANDLER_ITEM_CLICK
+            message.obj = API.BAIDU_SCHEME + beans[position].keyword
             handler.sendMessage(message)
         }
 
+        holder.itemView.setOnLongClickListener {
+            val message = Message()
+            message.what =
+                BaiduFragment.HANDLER_ITEM_LONG_CLICK
+            message.obj = API.BAIDU_SCHEME + beans[position].keyword
+            handler.sendMessage(message)
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val update: TextView = itemView.update_time_tv
         val index: TextView = itemView.index_tv
         val title: TextView = itemView.title_tv
         val isNew: TextView = itemView.is_new_tv

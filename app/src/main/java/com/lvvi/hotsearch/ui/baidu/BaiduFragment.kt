@@ -9,12 +9,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.lvvi.hotsearch.R
+import com.lvvi.hotsearch.model.BaiduModel
+import com.lvvi.hotsearch.ui.adapter.BaiduAdapter
+import com.lvvi.hotsearch.ui.main.BaseFragment
+import com.lvvi.hotsearch.ui.media.WebviewActivity
+import com.lvvi.hotsearch.utils.API
 import com.lvvi.hotsearch.utils.Constant
 import com.lvvi.hotsearch.utils.HttpHelper
 import java.lang.ref.WeakReference
@@ -22,19 +28,16 @@ import java.lang.ref.WeakReference
 /**
  * A placeholder fragment containing a simple view.
  */
-class BaiduFragment : Fragment() {
+class BaiduFragment : BaseFragment() {
 
 
     private lateinit var handler: MyHandler
 
     private lateinit var baiduAdapter: BaiduAdapter
 
-    private lateinit var updateTime: TextView
-    private lateinit var mainCv: RecyclerView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var progressBar: ProgressBar
+    private lateinit var emptyTv: TextView
+    private lateinit var mainRv: RecyclerView
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -48,21 +51,22 @@ class BaiduFragment : Fragment() {
     }
 
     private fun initData(root: View) {
-        updateTime = root.findViewById(R.id.update_time_tv)
+        progressBar = root.findViewById(R.id.progress_bar)
+        emptyTv = root.findViewById(R.id.empty_tv)
 
         baiduAdapter = BaiduAdapter()
         handler = MyHandler(this)
         baiduAdapter.setHandler(handler)
 
         val mainLayoutManager = LinearLayoutManager(activity)
-        mainCv = root.findViewById<RecyclerView>(R.id.main_rv).apply {
+        mainRv = root.findViewById<RecyclerView>(R.id.main_rv).apply {
             layoutManager = mainLayoutManager
             adapter = baiduAdapter
         }
     }
 
     private fun getData() {
-        HttpHelper.get().request(Constant.HOT_SEARCH_BAIDU, object : HttpHelper.HttpCallBack{
+        HttpHelper.get().request(API.HOT_SEARCH_BAIDU, object : HttpHelper.HttpCallBack{
             override fun onSuccess(result: String) {
                 val message = Message()
                 message.what = HANDLER_SET_DATA
@@ -72,10 +76,12 @@ class BaiduFragment : Fragment() {
 
             override fun onFailure(msg: String) {
                 Log.e("baidu", msg)
+                handler.sendEmptyMessage(HANDLER_GET_DATA_FAIL)
             }
 
             override fun onError(msg: String) {
                 Log.e("baidu", msg)
+                handler.sendEmptyMessage(HANDLER_GET_DATA_FAIL)
             }
 
         })
@@ -91,12 +97,26 @@ class BaiduFragment : Fragment() {
                 when(msg.what){
                     HANDLER_SET_DATA -> weakReference.get()?.setData(msg.obj.toString())
                     HANDLER_ITEM_CLICK -> weakReference.get()?.onItemClick(msg.obj.toString())
+                    HANDLER_ITEM_LONG_CLICK -> weakReference.get()?.onItemLongClick(msg.obj.toString())
+                    HANDLER_GET_DATA_FAIL -> weakReference.get()?.showEmptyTip()
                 }
             }
         }
     }
 
+    fun showEmptyTip() {
+        progressBar.visibility = View.GONE
+        emptyTv.visibility = View.VISIBLE
+    }
+
     fun onItemClick(url: String) {
+        val intent = Intent()
+        intent.setClass(context!!, WebviewActivity::class.java)
+        intent.putExtra(Constant.MEDIA_EXTRA_WEBVIEW_URL, url)
+        activity?.startActivity(intent)
+    }
+
+    fun onItemLongClick(url: String) {
         val intent = Intent()
         intent.data = Uri.parse(url)
         intent.action = Intent.ACTION_VIEW
@@ -108,16 +128,20 @@ class BaiduFragment : Fragment() {
             val model = Gson().fromJson(result, BaiduModel::class.java)
             baiduAdapter.setData(model.result.topwords as ArrayList<BaiduModel.ResultBean.TopwordsBean>)
 
-            updateTime.text = String.format(
-                resources.getString(R.string.update), model.result.topwords[0].gentime)
+            progressBar.visibility = View.GONE
+            mainRv.visibility = View.VISIBLE
         } catch (e: Exception) {
             Log.e("baidu", "set data failed.")
+            progressBar.visibility = View.GONE
+            emptyTv.visibility = View.VISIBLE
         }
     }
 
     companion object {
         const val HANDLER_SET_DATA = 0
         const val HANDLER_ITEM_CLICK = 1
+        const val HANDLER_ITEM_LONG_CLICK = 2
+        const val HANDLER_GET_DATA_FAIL = 4
 
         @JvmStatic
         fun newInstance(): BaiduFragment {

@@ -9,13 +9,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lvvi.hotsearch.R
+import com.lvvi.hotsearch.model.V2exModel
+import com.lvvi.hotsearch.ui.adapter.V2exAdapter
+import com.lvvi.hotsearch.ui.main.BaseFragment
+import com.lvvi.hotsearch.utils.API
 import com.lvvi.hotsearch.utils.Constant
 import com.lvvi.hotsearch.utils.HttpHelper
 import java.lang.ref.WeakReference
@@ -23,19 +29,16 @@ import java.lang.ref.WeakReference
 /**
  * A placeholder fragment containing a simple view.
  */
-class V2exFragment : Fragment() {
+class V2exFragment : BaseFragment() {
 
 
     private lateinit var handler: MyHandler
 
     private lateinit var v2exAdapter: V2exAdapter
 
-    private lateinit var updateTime: TextView
-    private lateinit var mainCv: RecyclerView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var progressBar: ProgressBar
+    private lateinit var emptyTv: TextView
+    private lateinit var mainRv: RecyclerView
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -49,21 +52,23 @@ class V2exFragment : Fragment() {
     }
 
     private fun initData(root: View) {
-        updateTime = root.findViewById(R.id.update_time_tv)
+        progressBar = root.findViewById(R.id.progress_bar)
+        emptyTv = root.findViewById(R.id.empty_tv)
 
         v2exAdapter = V2exAdapter()
         handler = MyHandler(this)
         v2exAdapter.setHandler(handler)
+        v2exAdapter.setActivity(activity!!)
 
         val mainLayoutManager = LinearLayoutManager(activity)
-        mainCv = root.findViewById<RecyclerView>(R.id.main_rv).apply {
+        mainRv = root.findViewById<RecyclerView>(R.id.main_rv).apply {
             layoutManager = mainLayoutManager
             adapter = v2exAdapter
         }
     }
 
     private fun getData() {
-        HttpHelper.get().request(Constant.HOT_SEARCH_V2EX, object : HttpHelper.HttpCallBack{
+        HttpHelper.get().request(API.HOT_SEARCH_V2EX, object : HttpHelper.HttpCallBack{
             override fun onSuccess(result: String) {
                 val message = Message()
                 message.what = HANDLER_SET_DATA
@@ -73,10 +78,12 @@ class V2exFragment : Fragment() {
 
             override fun onFailure(msg: String) {
                 Log.e("v2ex", msg)
+                handler.sendEmptyMessage(HANDLER_GET_DATA_FAIL)
             }
 
             override fun onError(msg: String) {
                 Log.e("v2ex", msg)
+                handler.sendEmptyMessage(HANDLER_GET_DATA_FAIL)
             }
 
         })
@@ -91,13 +98,31 @@ class V2exFragment : Fragment() {
             if (msg != null) {
                 when(msg.what){
                     HANDLER_SET_DATA -> weakReference.get()?.setData(msg.obj.toString())
-                    HANDLER_ITEM_CLICK -> weakReference.get()?.onItemClick(msg.obj.toString())
+                    HANDLER_ITEM_CLICK -> weakReference.get()?.onItemClick(msg.arg1)
+                    HANDLER_ITEM_LONG_CLICK -> weakReference.get()?.onItemLongCLick(msg.obj.toString())
+                    HANDLER_GET_DATA_FAIL -> weakReference.get()?.showEmptyTip()
                 }
             }
         }
     }
 
-    fun onItemClick(url: String) {
+    fun showEmptyTip() {
+        progressBar.visibility = View.GONE
+        emptyTv.visibility = View.VISIBLE
+    }
+
+    fun onItemClick(position: Int) {
+        val intent = Intent()
+        intent.setClass(context!!, TopicViewPagerActivity::class.java)
+
+        intent.putExtra(Constant.V2EX_EXTRA_BEANS, Gson().toJson(v2exAdapter.getData()))
+        intent.putExtra(Constant.V2EX_EXTRA_TOPIC_ID, v2exAdapter.getData()[position].id.toString())
+
+        activity?.startActivity(intent)
+        activity!!.overridePendingTransition(R.anim.translate_left_in, R.anim.translate_left_out)
+    }
+
+    fun onItemLongCLick(url: String) {
         val intent = Intent()
         intent.data = Uri.parse(url)
         intent.action = Intent.ACTION_VIEW
@@ -106,19 +131,25 @@ class V2exFragment : Fragment() {
 
     fun setData(result: String) {
         try {
-            val typeToken = object: TypeToken<List<V2exModel>>(){}.type
-            val v2exModels = Gson().fromJson<List<V2exModel>>(result, typeToken)
-            v2exAdapter.setData(v2exModels as ArrayList<V2exModel>)
+            val typeToken = object: TypeToken<ArrayList<V2exModel>>(){}.type
+            val v2exModels = Gson().fromJson<ArrayList<V2exModel>>(result, typeToken)
+            v2exAdapter.setData(v2exModels)
 
-            updateTime.text = getString(R.string.v2ex)
+            progressBar.visibility = View.GONE
+            mainRv.visibility = View.VISIBLE
         } catch (e: Exception) {
             Log.e("v2ex", "set data failed.")
+            progressBar.visibility = View.GONE
+            emptyTv.visibility = View.VISIBLE
         }
     }
 
     companion object {
         const val HANDLER_SET_DATA = 0
         const val HANDLER_ITEM_CLICK = 1
+        const val HANDLER_ITEM_LONG_CLICK = 2
+        const val HANDLER_GET_DATA_FAIL = 4
+
 
         @JvmStatic
         fun newInstance(): V2exFragment {

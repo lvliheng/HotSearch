@@ -1,4 +1,4 @@
-package com.lvvi.hotsearch.ui.baidu;
+package com.lvvi.hotsearch.model;
 
 import java.util.List;
 

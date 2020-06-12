@@ -1,13 +1,33 @@
 <resources>
     <string name="app_name">HotSearch</string>
 
-    <string name="tab_text_1">微博</string>
-    <string name="tab_text_2">百度</string>
-    <string name="tab_text_3">抖音</string>
-    <string name="tab_text_4">V2EX</string>
+    <string name="tab_text_weibo">微博</string>
+    <string name="tab_text_douyin">抖音</string>
+    <string name="tab_text_v2ex">V2EX</string>
+    <string name="tab_text_baidu">百度</string>
 
     <string name="is_new">新</string>
     <string name="dot">%d.</string>
     <string name="update">更新于: %s</string>
+    <string name="pic_count">+ %s</string>
+    <string name="pic_index_and_count">%d / %d</string>
     <string name="v2ex">好像已经更新了</string>
+    <string name="more">more</string>
+    <string name="live">LIVE</string>
+    <string name="article">文章</string>
+    <string name="empty_tip">其实网络上本没有热搜，\n搜索的人多了也就有了热搜</string>
+
+    <string name="pic_transition_name">pic_transition</string>
+    <string name="video_transition_name">video_transition</string>
+    <string name="title_transition_name">title_transition</string>
+
+    <string name="reply_counts">%d条回复 • %s</string>
+    <string name="header_tip">下拉显示内容</string>
+    <string name="footer_tip">上拉加载更多</string>
+    <string name="release_tip">可以松手了</string>
+    <string name="shown_tip">内容就在下面</string>
+    <string name="really_shown_tip">相信你的眼睛</string>
+    <string name="no_more_tip">没有了</string>
+    <string name="really_no_more_tip">真的没有了</string>
+
 </resources>
