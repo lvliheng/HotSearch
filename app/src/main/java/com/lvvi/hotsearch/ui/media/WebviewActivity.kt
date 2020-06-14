@@ -24,7 +24,7 @@ class WebviewActivity : BaseActivity() {
     }
 
     private fun init() {
-        val webView = findViewById<WebView>(R.id.webview)
+        val webView = findViewById<WebView>(R.id.content_tv)
 
         webView.webViewClient = MyWebviewClient()
 

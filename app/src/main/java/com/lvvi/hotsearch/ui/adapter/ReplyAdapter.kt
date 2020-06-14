@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Handler
 import android.os.Message
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -60,31 +61,20 @@ class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.ViewHolder>() {
         if (position == 0) {
             if (header.isHeaderShow) {
                 setHeaderContent(holder)
-//                if (headerHeight > 0) {
-//                    startAnimation(holder, headerHeight)
-//                } else {
-//                    holder.headerLayout.clearAnimation()
-//                    holder.headerLayout.visibility = View.VISIBLE
-//                }
                     holder.headerLayout.visibility = View.VISIBLE
             } else {
-//                holder.headerLayout.clearAnimation()
                 holder.headerLayout.visibility = View.GONE
             }
         } else {
-//            holder.headerLayout.clearAnimation()
             holder.headerLayout.visibility = View.GONE
-
-//            if (holder.headerContent.height > 0 && headerHeight == 0) {
-//                headerHeight = holder.mainLayout.height
-//            }
         }
 
         holder.name.text = beans[position].member.username
         holder.time.text = Utils.getDate(beans[position].created)
         holder.index.text = (position + 1).toString()
 
-        holder.content.text = beans[position].content
+        holder.content.setText(
+            Html.fromHtml(getHtml(beans[position].content_rendered)), TextView.BufferType.SPANNABLE)
     }
 
     private fun setHeaderContent(holder: ViewHolder) {
@@ -93,11 +83,9 @@ class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.ViewHolder>() {
         if (header.content_rendered.isNullOrEmpty()) {
             holder.headerContent.visibility = View.GONE
         } else {
-            holder.headerContent.webViewClient = MyWebviewClient(holder)
-            holder.headerContent.visibility = View.INVISIBLE
-
-            holder.headerContent.loadDataWithBaseURL("https://www.v2ex.com/",
-                getHtml(header.content_rendered), "text/html", "UTF-8", null)
+            holder.headerContent.setText(
+                Html.fromHtml(getHtml(header.content_rendered)), TextView.BufferType.SPANNABLE)
+            holder.headerContent.visibility = View.VISIBLE
         }
         holder.headerReplyCounts.text = String.format(
             context.getString(R.string.reply_counts),
@@ -109,9 +97,11 @@ class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.ViewHolder>() {
     private fun getHtml(content: String): String {
         var text = content
 
-        val header = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+//        val header = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+        val header = ""
 
-        val body = "<body style=\"color:GhostWhite; background-color: #222222;\">"
+//        val body = "<body style=\"color:GhostWhite; background-color: #222222;\">"
+        val body = "<font color='GhostWhite'>"
 
         text = text.replace("<a", "<a style=\"color:#4289c6;font-weight:bold\"")
         text = text.replace("<span", "<span style=\"color:#4289c6;font-weight:bold\"")
@@ -120,83 +110,23 @@ class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.ViewHolder>() {
             context, (screenWidth - Utils.convertDpToPixel(context, 20.toFloat())).toFloat())
         text = text.replace("<img", "<img width=\"$imgWidth\"")
 
-        return "$header$body$text</body>"
-    }
-
-    private inner class MyWebviewClient(holder: ViewHolder): WebViewClient() {
-        val mHolder = holder
-        override fun onPageFinished(view: WebView?, url: String?) {
-            super.onPageFinished(view, url)
-            MyHandler(mHolder).sendEmptyMessageDelayed(HANDLER_SHOW_HEADER, 100)
-        }
-    }
-
-    private class MyHandler(holder: ViewHolder): Handler() {
-        val mHolder = holder
-        override fun handleMessage(msg: Message?) {
-            super.handleMessage(msg)
-            when (msg?.what) {
-                HANDLER_SHOW_HEADER -> {
-                    Log.e("reply adapter", "handleMessage")
-                    mHolder.headerContent.visibility = View.VISIBLE
-                }
-            }
-        }
-    }
-
-    private fun startAnimation(holder: ReplyAdapter.ViewHolder, headerHeight: Int) {
-        Log.e("reply adapter", "startAnimation headerHeight: $headerHeight")
-        val animator = ValueAnimator.ofFloat(0f, 1f)
-
-        animator.duration = 1000
-        animator.interpolator = AccelerateDecelerateInterpolator()
-
-        animator.addUpdateListener {
-            holder.mainLayout.layoutParams.width = Utils.convertDpToPixel(context, 411.toFloat())
-            holder.mainLayout.layoutParams.height = headerHeight * (it.animatedValue as Float).toInt()
-
-            holder.mainLayout.requestLayout()
-        }
-
-        animator.addListener(object : Animator.AnimatorListener{
-            override fun onAnimationRepeat(animation: Animator?) {
-                Log.e("weibo adapter", "onAnimationRepeat")
-            }
-
-            override fun onAnimationEnd(animation: Animator?) {
-                Log.e("reply adapter", "onAnimationEnd height")
-            }
-
-            override fun onAnimationCancel(animation: Animator?) {
-                Log.e("weibo adapter", "onAnimationCancel")
-            }
-
-            override fun onAnimationStart(animation: Animator?) {
-                Log.e("weibo adapter", "onAnimationStart")
-                holder.headerLayout.visibility = View.VISIBLE
-            }
-        })
-
-        animator.start()
+//        return "$header$body$text</body>"
+        return "$header$body$text</font>"
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val mainLayout: LinearLayout = itemView.main_layout
         val headerLayout: LinearLayout = itemView.header_layout
         val headerName: TextView = itemView.header_name_tv
         val headerTime: TextView = itemView.header_time_tv
-        val headerContent: WebView = itemView.header_content_webview
+        val headerContent: TextView = itemView.header_content_tv
         val headerReplyCounts: TextView = itemView.header_reply_counts_tv
         val name: TextView = itemView.name_tv
         val time: TextView = itemView.time_tv
         val heart: ImageView = itemView.heart_iv
         val count: TextView = itemView.count_tv
         val index: TextView = itemView.index_tv
-        val content: TextView = itemView.webview
+        val content: TextView = itemView.content_tv
 
     }
 
-    companion object {
-        const val HANDLER_SHOW_HEADER = 0
-    }
 }

@@ -112,7 +112,7 @@
             </RelativeLayout>
 
             <WebView
-                android:id="@+id/webview"
+                android:id="@+id/content_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
                 android:visibility="gone"

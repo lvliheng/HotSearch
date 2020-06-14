@@ -42,6 +42,9 @@ class DouyinAdapter() :
 
     private var timer = Timer()
 
+    private var webView: WebView? = null
+    private var myWebviewClient: MyWebviewClient? = null
+
     fun setData(beans: ArrayList<DouyinModel.AwemeListBean>){
         this.beans = beans
         notifyDataSetChanged()
@@ -113,8 +116,6 @@ class DouyinAdapter() :
         holder.fire.visibility = View.VISIBLE
         holder.hotValue.visibility = View.VISIBLE
 
-        holder.webView.settings.javaScriptEnabled = true
-
         val layoutParams = holder.video.layoutParams
         layoutParams.width = Utils.convertDpToPixel(context, 113.toFloat())
         layoutParams.height = Utils.convertDpToPixel(context, 200.toFloat())
@@ -146,12 +147,15 @@ class DouyinAdapter() :
             Log.e("douyin adapter", "itemView onClick isPlaying: ${holder.video.isPlaying} currentPosition: ${holder.video.currentPosition}")
             if (holder.video.isPlaying) {
                 holder.video.pause()
+                holder.cover.visibility = View.VISIBLE
                 holder.play.visibility = View.VISIBLE
             } else {
-                if (holder.video.visibility == View.VISIBLE && holder.video.currentPosition > 0) {
+                if (holder.video.visibility == View.VISIBLE) {
                     holder.video.start()
                     holder.play.visibility = View.GONE
                 } else {
+                    holder.cover.visibility = View.VISIBLE
+                    holder.play.visibility = View.VISIBLE
                     playNext(position)
                 }
             }
@@ -168,8 +172,16 @@ class DouyinAdapter() :
 
     private fun prepareVideo(holder: ViewHolder, position: Int) {
         if (beans[position].aweme_info.video.url.isNullOrEmpty()) {
-            holder.webView.webViewClient = MyWebviewClient(holder, position)
-            holder.webView.loadUrl(beans[position].aweme_info.video.play_addr.url_list[0])
+            if (webView == null) {
+                webView = WebView(context)
+                webView?.settings?.javaScriptEnabled = true
+                myWebviewClient = MyWebviewClient()
+                webView?.webViewClient = myWebviewClient
+            }
+            myWebviewClient?.setData(holder, position)
+            webView?.clearCache(true)
+            webView?.clearHistory()
+            webView?.loadUrl(beans[position].aweme_info.video.play_addr.url_list[0])
         } else {
             if (beans[position].aweme_info.video.isPlaying) {
                 currPlayingPosition = position
@@ -232,7 +244,16 @@ class DouyinAdapter() :
             if (holder.video.isPlaying) {
                 holder.video.pause()
             }
-            holder.webView.loadUrl(beans[position].aweme_info.video.play_addr.url_list[0])
+            if (webView == null) {
+                webView = WebView(context)
+                webView?.settings?.javaScriptEnabled = true
+                myWebviewClient = MyWebviewClient()
+                webView?.webViewClient = myWebviewClient
+            }
+            myWebviewClient?.setData(holder, position)
+            webView?.clearCache(true)
+            webView?.clearHistory()
+            webView?.loadUrl(beans[position].aweme_info.video.play_addr.url_list[0])
             true
         }
 
@@ -293,6 +314,7 @@ class DouyinAdapter() :
             bean.aweme_info.video.isSelected = false
             bean.aweme_info.video.isPlaying = false
             if (index == position) {
+                Log.e("douyin adapter", "playNext: $position")
                 bean.aweme_info.video.isSelected = true
                 bean.aweme_info.video.isPlaying = true
             }
@@ -343,9 +365,15 @@ class DouyinAdapter() :
         }, 1000, 1000)
     }
 
-    inner class MyWebviewClient(holder: ViewHolder, position: Int): WebViewClient() {
-        private val mHolder = holder
-        private val mPosition = position
+    inner class MyWebviewClient(): WebViewClient() {
+        private var mHolder: ViewHolder? = null
+        private var mPosition = -1
+
+        fun setData(holder: ViewHolder, position: Int) {
+            mHolder = holder
+            mPosition = position
+        }
+
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
             Log.e("douyin adapter", "onPageStarted " +
@@ -356,7 +384,7 @@ class DouyinAdapter() :
 
                 beans[mPosition].aweme_info.video.url = url
                 if (beans[mPosition].aweme_info.video.isPlaying) {
-                    playVideo(mHolder, mPosition)
+                    playVideo(mHolder!!, mPosition)
                 }
             }
         }
@@ -370,7 +398,7 @@ class DouyinAdapter() :
         val nickName: TextView = itemView.nick_name_tv
         val fire: ImageView = itemView.fire_iv
         val hotValue: TextView = itemView.hot_value_tv
-        val webView: WebView = itemView.webview
+//        val webView: WebView = itemView.webview
         val video: VideoView = itemView.video_view
         val duration: TextView = itemView.duration_tv
         val play: Button = itemView.play_btn

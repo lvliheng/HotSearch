@@ -14,7 +14,7 @@
         android:contentDescription="@string/app_name"/>
 
     <WebView
-        android:id="@+id/webview"
+        android:id="@+id/content_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

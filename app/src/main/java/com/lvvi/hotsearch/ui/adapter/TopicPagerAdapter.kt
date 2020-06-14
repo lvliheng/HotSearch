@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.lvvi.hotsearch.model.V2exModel
 import com.lvvi.hotsearch.ui.v2ex.TopicFragment
 

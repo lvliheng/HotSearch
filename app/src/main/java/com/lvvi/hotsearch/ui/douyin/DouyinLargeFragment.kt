@@ -3,11 +3,9 @@ package com.lvvi.hotsearch.ui.douyin
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.media.MediaPlayer
-import android.media.MediaPlayer.OnCompletionListener
 import android.media.MediaPlayer.OnPreparedListener
 import android.net.Uri
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +13,6 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.gson.Gson
 import com.lvvi.hotsearch.R
 import com.lvvi.hotsearch.model.DouyinModel
@@ -57,7 +53,7 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
         val mainLayout: RelativeLayout = view.findViewById(R.id.main_layout)
         progressBar = view.findViewById(R.id.progressBar)
         videoView = view.findViewById(R.id.video_view)
-        webView = view.findViewById(R.id.webview)
+        webView = view.findViewById(R.id.content_tv)
         cover = view.findViewById(R.id.cover_iv)
         title = view.findViewById(R.id.title_tv)
         nickName = view.findViewById(R.id.nick_name_tv)
@@ -93,22 +89,22 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
         title.text = bean.aweme_info.desc
         nickName.text = "@${bean.aweme_info.author.nickname}"
 
-        val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-
-        val imgSize = "${displayMetrics.widthPixels}x${displayMetrics.widthPixels * 400 / 300}"
-
-        val coverUrl = if (bean.aweme_info.video.cover.url_list.size > 0) {
-            bean.aweme_info.video.cover.url_list[0].replace("300x400", imgSize)
-        } else {
-            bean.aweme_info.video.dynamic_cover.url_list[0]
-        }
-
-        Glide.with(cover)
-            .load(coverUrl)
-            .transition(DrawableTransitionOptions.withCrossFade())
-            .thumbnail(Glide.with(context!!).load(bean.aweme_info.video.cover.url_list[0]))
-            .into(cover)
+//        val displayMetrics = DisplayMetrics()
+//        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+//
+//        val imgSize = "${displayMetrics.widthPixels}x${displayMetrics.widthPixels * 400 / 300}"
+//
+//        val coverUrl = if (bean.aweme_info.video.cover.url_list.size > 0) {
+//            bean.aweme_info.video.cover.url_list[0].replace("300x400", imgSize)
+//        } else {
+//            bean.aweme_info.video.dynamic_cover.url_list[0]
+//        }
+//
+//        Glide.with(cover)
+//            .load(coverUrl)
+//            .transition(DrawableTransitionOptions.withCrossFade())
+//            .thumbnail(Glide.with(context!!).load(bean.aweme_info.video.cover.url_list[0]))
+//            .into(cover)
 
         prepareVideo()
     }
@@ -179,7 +175,7 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
 
         timer?.schedule(object : TimerTask() {
             override fun run() {
-                if (videoView.currentPosition > 0) {
+                if (videoView.isPlaying && videoView.currentPosition > 0) {
                     if (videoView.duration < 1000 * 60) {
                         timer?.cancel()
                     } else {
@@ -243,6 +239,7 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
 
     override fun onDestroy() {
         Log.e("douyin large fragment", "onDestroy")
+        webView.destroy()
         videoView.stopPlayback()
         super.onDestroy()
     }

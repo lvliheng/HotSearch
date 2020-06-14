@@ -13,6 +13,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lvvi.hotsearch.R
@@ -158,6 +159,9 @@ class TopicFragment : BaseFragment() {
                 IOverScrollState.STATE_BOUNCE_BACK -> {
                     loadMore = mOffset < -120
                     isHeaderShow = mOffset > 120
+                }
+                else -> {
+                    replyRv.requestDisallowInterceptTouchEvent(false)
                 }
             }
         }
