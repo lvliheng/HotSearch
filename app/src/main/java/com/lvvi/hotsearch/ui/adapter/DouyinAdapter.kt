@@ -66,10 +66,6 @@ class DouyinAdapter() :
         this.handler = handler
     }
 
-    fun getCurrPlayingPosition(): Int {
-        return currPlayingPosition
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
         val itemView = LayoutInflater.from(context).inflate(R.layout.item_douyin, parent, false)
@@ -398,7 +394,6 @@ class DouyinAdapter() :
         val nickName: TextView = itemView.nick_name_tv
         val fire: ImageView = itemView.fire_iv
         val hotValue: TextView = itemView.hot_value_tv
-//        val webView: WebView = itemView.webview
         val video: VideoView = itemView.video_view
         val duration: TextView = itemView.duration_tv
         val play: Button = itemView.play_btn
