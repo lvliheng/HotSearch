@@ -177,7 +177,8 @@ class DouyinAdapter() :
             myWebviewClient?.setData(holder, position)
             webView?.clearCache(true)
             webView?.clearHistory()
-            webView?.loadUrl(beans[position].aweme_info.video.play_addr.url_list[0])
+            webView?.loadUrl(
+                beans[position].aweme_info.video.play_addr.url_list[0].replace("playwm", "play"))
         } else {
             if (beans[position].aweme_info.video.isPlaying) {
                 currPlayingPosition = position
@@ -249,7 +250,8 @@ class DouyinAdapter() :
             myWebviewClient?.setData(holder, position)
             webView?.clearCache(true)
             webView?.clearHistory()
-            webView?.loadUrl(beans[position].aweme_info.video.play_addr.url_list[0])
+            webView?.loadUrl(
+                beans[position].aweme_info.video.play_addr.url_list[0].replace("playwm", "play"))
             true
         }
 

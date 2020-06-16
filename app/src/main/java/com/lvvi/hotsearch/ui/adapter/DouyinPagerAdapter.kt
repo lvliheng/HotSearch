@@ -24,14 +24,6 @@ class DouyinPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
         return beans
     }
 
-    fun getItem(position: Int): DouyinLargeFragment? {
-        return if (position > fragments.size) {
-            null
-        } else {
-            fragments[position]
-        }
-    }
-
     override fun getItemCount(): Int {
         return beans.size
     }

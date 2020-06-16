@@ -111,7 +111,9 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
 
     private fun prepareVideo() {
         if (bean.aweme_info.video.url.isNullOrEmpty()) {
-            webView.loadUrl(bean.aweme_info.video.play_addr.url_list[0])
+            webView.clearCache(true)
+            webView.clearHistory()
+            webView.loadUrl(bean.aweme_info.video.play_addr.url_list[0].replace("playwm", "play"))
         } else {
             playVideo()
         }
@@ -188,7 +190,9 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
 
     override fun onError(mediaPlayer: MediaPlayer, i: Int, i1: Int): Boolean {
         Log.e("douyin large fragment", "onError: i: $i i1: $i1")
-        webView.loadUrl(bean.aweme_info.video.play_addr.url_list[0])
+        webView.clearCache(true)
+        webView.clearHistory()
+        webView.loadUrl(bean.aweme_info.video.play_addr.url_list[0].replace("playwm", "play"))
         return false
     }
 

@@ -1,18 +1,10 @@
 package com.lvvi.hotsearch.ui.adapter
 
-import android.animation.Animator
-import android.animation.ValueAnimator
 import android.content.Context
-import android.os.Handler
-import android.os.Message
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -30,8 +22,8 @@ class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.ViewHolder>() {
     private var header = V2exTopicModel()
     private var beans = ArrayList<V2exReplyModel>()
 
-    private var headerHeight = 0
     private var screenWidth = 0
+    private var imgWidth = 0
 
     fun setData(header: V2exTopicModel, beans: ArrayList<V2exReplyModel>) {
         this.header = header
@@ -45,6 +37,9 @@ class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.ViewHolder>() {
 
     fun setScreenWidth(screenWidth: Int) {
         this.screenWidth = screenWidth
+
+        imgWidth = Utils.convertPixelsToDp(
+            context, (screenWidth - Utils.convertDpToPixel(context, 20.toFloat())).toFloat())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -97,21 +92,14 @@ class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.ViewHolder>() {
     private fun getHtml(content: String): String {
         var text = content
 
-//        val header = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
-        val header = ""
-
-//        val body = "<body style=\"color:GhostWhite; background-color: #222222;\">"
-        val body = "<font color='GhostWhite'>"
-
         text = text.replace("<a", "<a style=\"color:#4289c6;font-weight:bold\"")
         text = text.replace("<span", "<span style=\"color:#4289c6;font-weight:bold\"")
 
-        val imgWidth = Utils.convertPixelsToDp(
-            context, (screenWidth - Utils.convertDpToPixel(context, 20.toFloat())).toFloat())
-        text = text.replace("<img", "<img width=\"$imgWidth\"")
+        if (text.contains("<img")) {
+            text = text.replace("<img", "<img width=\"$imgWidth\"")
+        }
 
-//        return "$header$body$text</body>"
-        return "$header$body$text</font>"
+        return text.trim()
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
