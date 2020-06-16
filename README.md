@@ -1,13 +1,20 @@
 ![](https://github.com/lvliheng/HotSearch/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png?raw=true)
 
-热搜整合APP
+So Hot--Android热搜整合应用
+=
 
-目前加入的有：
+### 现有模块：
+
 * 微博
 * 抖音
 * V2EX
 
-预览：
+### TODO：
+
+* 增加更多模块
+* 主题和模块自定义设置
+
+### 预览：
 
 ![](https://github.com/lvliheng/HotSearch/blob/master/screenshots/IMG_4417.gif)
 
