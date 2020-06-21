@@ -12,6 +12,8 @@ import com.lvvi.hotsearch.utils.Constant
 
 class TopicViewPagerActivity : BaseActivity() {
 
+    private lateinit var viewPager: ViewPager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_topic_view_pager)
@@ -21,7 +23,7 @@ class TopicViewPagerActivity : BaseActivity() {
 
     private fun init() {
         val topicPagerAdapter = TopicPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = findViewById(R.id.view_pager)
+        viewPager = findViewById(R.id.view_pager)
         viewPager.adapter = topicPagerAdapter
 
         val bundle = intent.extras

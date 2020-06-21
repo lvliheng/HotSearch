@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Handler
 import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,7 +22,6 @@ import com.lvvi.hotsearch.ui.douyin.DouyinFragment
 import com.lvvi.hotsearch.model.DouyinModel
 import com.lvvi.hotsearch.utils.Utils
 import kotlinx.android.synthetic.main.item_douyin.view.*
-import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -43,7 +41,7 @@ class DouyinAdapter() :
     private var timer = Timer()
 
     private var webView: WebView? = null
-    private var myWebviewClient: MyWebviewClient? = null
+    private var myWebViewClient: MyWebViewClient? = null
 
     fun setData(beans: ArrayList<DouyinModel.AwemeListBean>){
         this.beans = beans
@@ -120,9 +118,6 @@ class DouyinAdapter() :
         if (beans[position].aweme_info.video.isSelected) {
             prepareVideo(holder, position)
         } else {
-            if (MyHandler(this).hasMessages(HANDLER_SHOW_VIDEO)) {
-                MyHandler(this).removeMessages(HANDLER_SHOW_VIDEO)
-            }
             hideVideo(holder)
         }
 
@@ -166,15 +161,21 @@ class DouyinAdapter() :
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun prepareVideo(holder: ViewHolder, position: Int) {
+        timer.cancel()
+        if (holder.cover.visibility == View.GONE) {
+            holder.cover.visibility = View.VISIBLE
+        }
+
         if (beans[position].aweme_info.video.url.isNullOrEmpty()) {
             if (webView == null) {
                 webView = WebView(context)
                 webView?.settings?.javaScriptEnabled = true
-                myWebviewClient = MyWebviewClient()
-                webView?.webViewClient = myWebviewClient
+                myWebViewClient = MyWebViewClient()
+                webView?.webViewClient = myWebViewClient
             }
-            myWebviewClient?.setData(holder, position)
+            myWebViewClient?.setData(holder, position)
             webView?.clearCache(true)
             webView?.clearHistory()
             webView?.loadUrl(
@@ -187,6 +188,7 @@ class DouyinAdapter() :
             } else {
                 if (holder.video.isPlaying) {
                     holder.video.pause()
+                    holder.video.seekTo(0)
                 }
                 holder.cover.visibility = View.VISIBLE
                 holder.video.visibility = View.GONE
@@ -198,8 +200,10 @@ class DouyinAdapter() :
     }
 
     private fun hideVideo(holder: ViewHolder) {
+        timer.cancel()
         if (holder.video.isPlaying) {
             holder.video.pause()
+            holder.video.seekTo(0)
         }
 
         holder.cover.visibility = View.VISIBLE
@@ -209,9 +213,16 @@ class DouyinAdapter() :
         holder.progressBar.visibility = View.GONE
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun playVideo(holder: ViewHolder, position: Int) {
-        Log.e("douyin adapter", "playVideo currentPosition: ${holder.video.currentPosition}")
         if (holder.video.currentPosition > 0) {
+            if (holder.progressBar.visibility == View.VISIBLE) {
+                holder.progressBar.visibility = View.GONE
+            }
+            if (holder.cover.visibility == View.VISIBLE) {
+                holder.cover.visibility = View.GONE
+            }
+
             holder.video.start()
             return
         }
@@ -221,33 +232,28 @@ class DouyinAdapter() :
             it.setVolume(0f, 0f)
             it.isLooping = true
 
-            if (holder.video.currentPosition == 0 && beans[position].aweme_info.video.duration > 1000 * 60) {
-                holder.duration.visibility = View.VISIBLE
-                startDurationTimer(holder.duration, beans[position].aweme_info.video.duration)
+            if (holder.video.currentPosition == 0) {
+                startDurationTimer(holder, beans[position].aweme_info.video.duration)
             }
 
             if (it.videoWidth > it.videoHeight) {
                 setHorizontalLayoutParams(holder)
             }
-
-            val message = Message()
-            message.what = HANDLER_SHOW_VIDEO
-            message.obj = holder
-            MyHandler(this).sendMessageDelayed(message, 300)
         }
 
         holder.video.setOnErrorListener { _, what, _ ->
             Log.e("douyin adapter", "OnError what: $what")
             if (holder.video.isPlaying) {
                 holder.video.pause()
+                holder.video.seekTo(0)
             }
             if (webView == null) {
                 webView = WebView(context)
                 webView?.settings?.javaScriptEnabled = true
-                myWebviewClient = MyWebviewClient()
-                webView?.webViewClient = myWebviewClient
+                myWebViewClient = MyWebViewClient()
+                webView?.webViewClient = myWebViewClient
             }
-            myWebviewClient?.setData(holder, position)
+            myWebViewClient?.setData(holder, position)
             webView?.clearCache(true)
             webView?.clearHistory()
             webView?.loadUrl(
@@ -270,22 +276,6 @@ class DouyinAdapter() :
         holder.video.visibility = View.VISIBLE
     }
 
-    class MyHandler(adapter: DouyinAdapter): Handler() {
-        private val weakReference = WeakReference(adapter)
-        override fun handleMessage(msg: Message?) {
-            super.handleMessage(msg)
-            when (msg?.what) {
-                HANDLER_SHOW_VIDEO ->
-                    weakReference.get()?.showVideo(msg.obj as ViewHolder)
-            }
-        }
-    }
-
-    private fun showVideo(holder: ViewHolder) {
-        holder.progressBar.visibility = View.GONE
-        holder.cover.visibility = View.GONE
-    }
-
     private fun setHorizontalLayoutParams(holder: ViewHolder) {
         val layoutParams = holder.video.layoutParams
         layoutParams.width = RelativeLayout.LayoutParams.WRAP_CONTENT
@@ -296,13 +286,15 @@ class DouyinAdapter() :
         holder.nickName.visibility = View.GONE
         holder.fire.visibility = View.GONE
         holder.hotValue.visibility = View.GONE
+
+        holder.progressBar.visibility = View.GONE
+        holder.cover.visibility = View.GONE
     }
 
     //unused
     private fun scrollToNext(position: Int) {
         val message = Message()
-        message.what =
-            DouyinFragment.HANDLER_ITEM_SCROLL_TO_NEXT
+        message.what = DouyinFragment.HANDLER_ITEM_SCROLL_TO_NEXT
         message.arg1 = position
         handler.sendMessage(message)
     }
@@ -312,7 +304,6 @@ class DouyinAdapter() :
             bean.aweme_info.video.isSelected = false
             bean.aweme_info.video.isPlaying = false
             if (index == position) {
-                Log.e("douyin adapter", "playNext: $position")
                 bean.aweme_info.video.isSelected = true
                 bean.aweme_info.video.isPlaying = true
             }
@@ -320,20 +311,8 @@ class DouyinAdapter() :
         notifyDataSetChanged()
     }
 
-    private fun startDurationTimer(textView: TextView, duration: Int) {
+    private fun startDurationTimer(holder: ViewHolder, duration: Int) {
         var mDuration = duration
-        when {
-            mDuration == -1 -> {
-                textView.text = context.getString(R.string.live)
-            }
-            mDuration > 0 -> {
-                textView.text = Utils.getTime(mDuration.toLong())
-            }
-            else -> {
-                textView.visibility = View.GONE
-                return
-            }
-        }
 
         timer.cancel()
         timer = Timer()
@@ -344,26 +323,42 @@ class DouyinAdapter() :
             override fun run() {
                 timerTaskExecuteTimes ++
 
-                if (timerTaskExecuteTimes >= 5) {
+                if (timerTaskExecuteTimes >= 10) {
                     timer.cancel()
 
                     activity.runOnUiThread {
-                        textView.visibility = View.GONE
+                        holder.duration.visibility = View.GONE
                     }
                 } else {
-                    if (mDuration > 1000) {
-                        mDuration -= 1000
+                    if (duration >= 1000 * 60) {
+                        mDuration -= 500
                         activity.runOnUiThread {
-                            textView.text = Utils.getTime(mDuration.toLong())
+                            if (holder.duration.visibility == View.GONE) {
+                                holder.duration.visibility = View.VISIBLE
+                            }
+                            holder.duration.text = Utils.getTime(mDuration.toLong())
+                        }
+                    }
+                }
+
+                if (holder.video.currentPosition > 0) {
+                    if (holder.progressBar.visibility == View.VISIBLE) {
+                        activity.runOnUiThread {
+                            holder.progressBar.visibility = View.GONE
+                        }
+                    }
+                    if (holder.cover.visibility == View.VISIBLE) {
+                        activity.runOnUiThread {
+                            holder.cover.visibility = View.GONE
                         }
                     }
                 }
             }
 
-        }, 1000, 1000)
+        }, 500, 500)
     }
 
-    inner class MyWebviewClient(): WebViewClient() {
+    inner class MyWebViewClient: WebViewClient() {
         private var mHolder: ViewHolder? = null
         private var mPosition = -1
 
@@ -374,16 +369,11 @@ class DouyinAdapter() :
 
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-            Log.e("douyin adapter", "onPageStarted " +
-                    "position: $mPosition isPlaying: ${beans[mPosition].aweme_info.video.isPlaying} " +
-                    "isSameUrl: ${url != beans[mPosition].aweme_info.video.url} url: $url")
-            if (url != beans[mPosition].aweme_info.video.url) {
-                view?.loadUrl("javascript:document.getElementsByTagName(\"video\")[0].pause();")
+            view?.loadUrl("javascript:document.getElementsByTagName(\"video\")[0].pause();")
 
-                beans[mPosition].aweme_info.video.url = url
-                if (beans[mPosition].aweme_info.video.isPlaying) {
-                    playVideo(mHolder!!, mPosition)
-                }
+            beans[mPosition].aweme_info.video.url = url
+            if (beans[mPosition].aweme_info.video.isPlaying) {
+                playVideo(mHolder!!, mPosition)
             }
         }
     }
@@ -400,10 +390,6 @@ class DouyinAdapter() :
         val duration: TextView = itemView.duration_tv
         val play: Button = itemView.play_btn
         val progressBar: ProgressBar = itemView.progressBar
-    }
-
-    companion object {
-        const val HANDLER_SHOW_VIDEO = 0
     }
 
 }

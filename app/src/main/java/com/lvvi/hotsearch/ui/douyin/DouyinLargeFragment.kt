@@ -6,6 +6,8 @@ import android.media.MediaPlayer
 import android.media.MediaPlayer.OnPreparedListener
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -66,7 +68,7 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
         videoView.setOnErrorListener(this)
 
         webView.settings.javaScriptEnabled = true
-        webView.webViewClient = MyWebviewClient()
+        webView.webViewClient = MyWebViewClient()
 
         mainLayout.setOnClickListener {
             if (videoView.visibility == View.VISIBLE) {
@@ -128,7 +130,7 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
         videoView.visibility = View.VISIBLE
     }
 
-    inner class MyWebviewClient(): WebViewClient() {
+    inner class MyWebViewClient(): WebViewClient() {
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
             val titleStr = if (bean.aweme_info != null) {
@@ -207,9 +209,18 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
             bean.aweme_info.video.isPlaying = true
         }
 
-        if (progressBar.visibility == View.GONE) {
+        Log.e("douyin large fragment", "onResume videoView.visibility: ${videoView.visibility} isPlaying: ${videoView.isPlaying}")
+        if (videoView.visibility == View.GONE) {
             videoView.visibility = View.VISIBLE
-            videoView.start()
+        } else {
+            if (!videoView.isPlaying) {
+                videoView.requestFocus()
+                videoView.start()
+            }
+        }
+
+        if (play.visibility == View.VISIBLE) {
+            play.visibility = View.GONE
         }
 
         startTimer()
@@ -231,7 +242,11 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
             videoView.seekTo(0)
             videoView.pause()
         }
+
         videoView.visibility = View.GONE
+
+        //直接隐藏的话，返回上一视频会黑屏卡顿；不隐藏的话，切换到下一视频时会显示上一视频的画面
+        MyHandler(videoView).sendEmptyMessageDelayed(HANDLER_SHOW_VIDEO_VIEW, 300)
 
         if (timer != null) {
             timer?.cancel()
@@ -246,6 +261,17 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
         webView.destroy()
         videoView.stopPlayback()
         super.onDestroy()
+    }
+
+    class MyHandler(videoView: VideoView): Handler() {
+        private val mVideoView = videoView
+
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            when (msg.what) {
+                HANDLER_SHOW_VIDEO_VIEW -> mVideoView.visibility = View.VISIBLE
+            }
+        }
     }
 
     fun play() {
@@ -267,6 +293,9 @@ class DouyinLargeFragment : BaseFragment(), OnPreparedListener, MediaPlayer.OnEr
     }
 
     companion object {
+
+        const val HANDLER_SHOW_VIDEO_VIEW = 0
+
         fun newInstance(beanString: String): DouyinLargeFragment {
             return DouyinLargeFragment().apply {
                 arguments = Bundle().apply {
