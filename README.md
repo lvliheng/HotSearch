@@ -22,15 +22,3 @@ So Hot--Android热搜整合应用
 ### 预览：
 
 ![](https://github.com/lvliheng/HotSearch/blob/master/screenshots/sohot.gif)
-
-![](https://github.com/lvliheng/HotSearch/blob/master/screenshots/device-2020-06-12-205357.png)
-
-![](https://github.com/lvliheng/HotSearch/blob/master/screenshots/device-2020-06-12-205431.png)
-
-![](https://github.com/lvliheng/HotSearch/blob/master/screenshots/device-2020-06-12-205442.png)
-
-![](https://github.com/lvliheng/HotSearch/blob/master/screenshots/device-2020-06-12-205500.png)
-
-![](https://github.com/lvliheng/HotSearch/blob/master/screenshots/device-2020-06-12-205543.png)
-
-![](https://github.com/lvliheng/HotSearch/blob/master/screenshots/device-2020-06-12-205611.png)
