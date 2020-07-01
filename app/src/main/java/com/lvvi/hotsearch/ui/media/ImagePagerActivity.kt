@@ -45,7 +45,6 @@ class ImagePagerActivity : BaseActivity() {
         setContentView(R.layout.actiivty_image_pager)
 
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-
         window.enterTransition = null
 
         initView()

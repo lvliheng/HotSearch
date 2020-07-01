@@ -8,12 +8,11 @@ import android.os.Message
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.PointerIcon
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -27,7 +26,7 @@ import com.lvvi.hotsearch.utils.Constant
 import com.lvvi.hotsearch.utils.HttpHelper
 import java.lang.ref.WeakReference
 
-class WeiboFragment : BaseFragment() {
+class WeiboFragment() : BaseFragment() {
 
 
     private lateinit var handler: MyHandler
@@ -37,6 +36,23 @@ class WeiboFragment : BaseFragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var emptyTv: TextView
     private lateinit var mainRv: RecyclerView
+
+    private val dispatcher by lazy { requireActivity().onBackPressedDispatcher }
+    lateinit var callback: OnBackPressedCallback
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (!hasItemExpanded()) {
+                    callback.isEnabled = false
+                    dispatcher.onBackPressed()
+                }
+            }
+        }
+
+        dispatcher.addCallback(this, callback)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -92,14 +108,14 @@ class WeiboFragment : BaseFragment() {
                     layoutManager.findFirstCompletelyVisibleItemPosition()
                 val lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition()
 
-                if (position in firstVisibleItemPosition..lastVisibleItemPosition) {
+                return if (position in firstVisibleItemPosition..lastVisibleItemPosition) {
                     weiboAdapter.setLastExpandedPosition(position)
                     weiboAdapter.setCurrExpandedPosition(position)
                     weiboAdapter.notifyDataSetChanged()
+                    true
                 } else {
-                    mainRv.scrollToPosition(position)
+                    false
                 }
-                return true
             } else {
                 return false
             }

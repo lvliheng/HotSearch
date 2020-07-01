@@ -17,7 +17,6 @@ class WebviewActivity : BaseActivity() {
         setContentView(R.layout.activity_webview)
 
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-
         window.enterTransition = null
 
         init()
