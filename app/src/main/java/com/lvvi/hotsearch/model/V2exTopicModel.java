@@ -2,21 +2,6 @@ package com.lvvi.hotsearch.model;
 
 public class V2exTopicModel {
 
-    /**
-     * node : {"avatar_large":"https://cdn.v2ex.com/navatar/4ea0/6fbc/770_large.png?m=1590598383","name":"career","avatar_normal":"https://cdn.v2ex.com/navatar/4ea0/6fbc/770_normal.png?m=1590598383","title":"职场话题","url":"https://www.v2ex.com/go/career","topics":9111,"footer":"","header":"这里，我们聊聊那些工作中遇到的开心和不开心的事。","title_alternative":"Career","avatar_mini":"https://cdn.v2ex.com/navatar/4ea0/6fbc/770_mini.png?m=1590598383","stars":1647,"aliases":{},"root":false,"id":770,"parent_node_name":"work"}
-     * member : {"username":"yndsht","website":null,"github":null,"psn":null,"avatar_normal":"https://cdn.v2ex.com/gravatar/b93a73f29ecd565b51f50dcd715a8c5c?s=24&d=retro","bio":null,"url":"https://www.v2ex.com/u/yndsht","tagline":null,"twitter":null,"created":1560156471,"avatar_large":"https://cdn.v2ex.com/gravatar/b93a73f29ecd565b51f50dcd715a8c5c?s=24&d=retro","avatar_mini":"https://cdn.v2ex.com/gravatar/b93a73f29ecd565b51f50dcd715a8c5c?s=24&d=retro","location":null,"btc":null,"id":420401}
-     * last_reply_by : demonzoo
-     * last_touched : 1590992032
-     * title : 入职公司一个月就怀孕了
-     * url : https://www.v2ex.com/t/677386
-     * created : 1590979011
-     * content : 如题，进入职场 4 年了，今年刚换了公司，入职一个月公司就给转正了，也就是 5 月 26 。 最近几天被查出意外怀孕了，如果公司要用其它理由开除员工，如何保证自己的合法权益呢？
-     * content_rendered : <p>如题，进入职场 4 年了，今年刚换了公司，入职一个月公司就给转正了，也就是 5 月 26 。 最近几天被查出意外怀孕了，如果公司要用其它理由开除员工，如何保证自己的合法权益呢？</p>
-     * last_modified : 1590980215
-     * replies : 137
-     * id : 677386
-     */
-
     private NodeBean node;
     private MemberBean member;
     private String last_reply_by;
@@ -137,23 +122,6 @@ public class V2exTopicModel {
     }
 
     public static class NodeBean {
-        /**
-         * avatar_large : https://cdn.v2ex.com/navatar/4ea0/6fbc/770_large.png?m=1590598383
-         * name : career
-         * avatar_normal : https://cdn.v2ex.com/navatar/4ea0/6fbc/770_normal.png?m=1590598383
-         * title : 职场话题
-         * url : https://www.v2ex.com/go/career
-         * topics : 9111
-         * footer :
-         * header : 这里，我们聊聊那些工作中遇到的开心和不开心的事。
-         * title_alternative : Career
-         * avatar_mini : https://cdn.v2ex.com/navatar/4ea0/6fbc/770_mini.png?m=1590598383
-         * stars : 1647
-         * aliases : {}//[]
-         * root : false
-         * id : 770
-         * parent_node_name : work
-         */
 
         private String avatar_large;
         private String name;
@@ -296,23 +264,6 @@ public class V2exTopicModel {
     }
 
     public static class MemberBean {
-        /**
-         * username : yndsht
-         * website : null
-         * github : null
-         * psn : null
-         * avatar_normal : https://cdn.v2ex.com/gravatar/b93a73f29ecd565b51f50dcd715a8c5c?s=24&d=retro
-         * bio : null
-         * url : https://www.v2ex.com/u/yndsht
-         * tagline : null
-         * twitter : null
-         * created : 1560156471
-         * avatar_large : https://cdn.v2ex.com/gravatar/b93a73f29ecd565b51f50dcd715a8c5c?s=24&d=retro
-         * avatar_mini : https://cdn.v2ex.com/gravatar/b93a73f29ecd565b51f50dcd715a8c5c?s=24&d=retro
-         * location : null
-         * btc : null
-         * id : 420401
-         */
 
         private String username;
         private Object website;

@@ -1,16 +1,6 @@
 package com.lvvi.hotsearch.model;
 
 public class V2exReplyModel {
-    /**
-     * member : {"username":"phytry","website":null,"github":null,"psn":null,"avatar_normal":"https://cdn.v2ex.com/gravatar/a9faf920e35b5067556cbb77e13700a5?s=24&d=retro","bio":null,"url":"https://www.v2ex.com/u/phytry","tagline":null,"twitter":null,"created":1508917076,"avatar_large":"https://cdn.v2ex.com/gravatar/a9faf920e35b5067556cbb77e13700a5?s=24&d=retro","avatar_mini":"https://cdn.v2ex.com/gravatar/a9faf920e35b5067556cbb77e13700a5?s=24&d=retro","location":null,"btc":null,"id":262368}
-     * created : 1590809763
-     * topic_id : 676900
-     * content :
-     * content_rendered :
-     * last_modified : 1590809763
-     * member_id : 262368
-     * id : 9047555
-     */
 
     private MemberBean member;
     private int created;
@@ -86,23 +76,6 @@ public class V2exReplyModel {
     }
 
     public static class MemberBean {
-        /**
-         * username : phytry
-         * website : null
-         * github : null
-         * psn : null
-         * avatar_normal : https://cdn.v2ex.com/gravatar/a9faf920e35b5067556cbb77e13700a5?s=24&d=retro
-         * bio : null
-         * url : https://www.v2ex.com/u/phytry
-         * tagline : null
-         * twitter : null
-         * created : 1508917076
-         * avatar_large : https://cdn.v2ex.com/gravatar/a9faf920e35b5067556cbb77e13700a5?s=24&d=retro
-         * avatar_mini : https://cdn.v2ex.com/gravatar/a9faf920e35b5067556cbb77e13700a5?s=24&d=retro
-         * location : null
-         * btc : null
-         * id : 262368
-         */
 
         private String username;
         private Object website;

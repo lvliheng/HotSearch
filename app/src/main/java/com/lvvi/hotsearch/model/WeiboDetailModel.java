@@ -29,13 +29,6 @@ public class WeiboDetailModel {
 
         public static class CardsBean {
 
-            /**
-             * card_type
-             * <p>
-             * 9: mblog -> text
-             * 11: card_group(?) -> (card_type:9)mblog -> text
-             */
-
             private int card_type;
             private String desc;
             //            private String scheme;
@@ -269,17 +262,6 @@ public class WeiboDetailModel {
 
 
                 public static class PageInfoBean {
-                    /**
-                     * page_pic : {"url":"https://wx1.sinaimg.cn/orj480/7bf67cf4ly1ge849jk4a6j20hs0a0ju1.jpg"}
-                     * page_url : https://m.weibo.cn/p/index?containerid=2304444498269817208850&url_type=39&object_type=video&pos=2&luicode=10000011&lfid=100103type%3D1%26t%3D10%26q%3D%23%E7%BD%91%E5%8F%8B%E5%85%A8%E8%8B%B1%E6%96%87%E8%A7%A3%E8%AF%BB%E4%B8%AD%E5%9B%BD%E6%8A%97%E7%96%AB%23
-                     * page_title : 辽宁共青团的微博视频
-                     * content1 : 辽宁共青团的微博视频
-                     * content2 : 【泪目！13分钟的中国抗疫长卷，看到你的故事了吗？】一声声，一幕幕，都是我们共同的经历。致敬每一个战“疫”英雄！（人民日报）#网友全英文解读中国抗疫#
-                     * type : video
-                     * media_info : {"video_orientation":"horizontal","name":"辽宁共青团的微博视频","stream_url":"http://f.video.weibocdn.com/S12nogEolx07CORvGMco01041201kLPJ0E010.mp4?label=mp4_ld&template=640x360.25.0&trans_finger=40a32e8439c5409a63ccf853562a60ef&Expires=1589470110&ssig=HT8TE%2BfeAx&KID=unistore,video","stream_url_hd":"http://f.video.weibocdn.com/DD9tNv6Alx07CORvYf0k01041201uP8I0E010.mp4?label=mp4_hd&template=640x360.25.0&trans_finger=62b30a3f061b162e421008955c73f536&Expires=1589470110&ssig=ersz4czV90&KID=unistore,video","h5_url":"https://video.weibo.com/show?fid=1034:4498269817208850","mp4_sd_url":"http://f.video.weibocdn.com/S12nogEolx07CORvGMco01041201kLPJ0E010.mp4?label=mp4_ld&template=640x360.25.0&trans_finger=40a32e8439c5409a63ccf853562a60ef&Expires=1589470110&ssig=HT8TE%2BfeAx&KID=unistore,video","mp4_hd_url":"http://f.video.weibocdn.com/DD9tNv6Alx07CORvYf0k01041201uP8I0E010.mp4?label=mp4_hd&template=640x360.25.0&trans_finger=62b30a3f061b162e421008955c73f536&Expires=1589470110&ssig=ersz4czV90&KID=unistore,video","h265_mp4_hd":"","h265_mp4_ld":"","inch_4_mp4_hd":"","inch_5_mp4_hd":"","inch_5_5_mp4_hd":"","mp4_720p_mp4":"","hevc_mp4_720p":"","prefetch_type":1,"prefetch_size":262144,"act_status":1,"protocol":"general,dash","media_id":"4498269817208850","origin_total_bitrate":0,"duration":796,"next_title":"【泪目！13分钟的中国抗疫长卷，看到你的故事了吗？】一声声，一幕幕，都是我们共同的经历。致敬每一个战\u201c疫\u201d英雄！（人民日报）#网友全英文解读中国抗疫# \u200b","play_completion_actions":[{"type":"1","icon":"http://img.t.sinajs.cn/t6/style/images/face/feed_c_r.png","text":"重播","link":"","btn_code":1000,"show_position":1,"actionlog":{"oid":"2304444498269817208850","act_code":1221,"act_type":0,"source":"video"}}],"video_publish_time":1587954587,"play_loop_type":0,"author_mid":"4498270174769898","author_name":"辽宁共青团","is_playlist":1,"get_playlist_id":4324500519498133,"extra_info":{"sceneid":"feed"},"has_recommend_video":1,"video_download_strategy":{"abandon_download":0},"jump_to":3,"online_users":"9万次观看","online_users_number":98361,"ttl":3600,"storage_type":"oss","is_keep_current_mblog":0}
-                     * play_count : 9万次观看
-                     * object_id : 1034:4498269817208850
-                     */
 
                     private PagePicBean page_pic;
                     private String page_url;
@@ -362,46 +344,6 @@ public class WeiboDetailModel {
                     }
 
                     public static class MediaInfoBean {
-                        /**
-                         * video_orientation : horizontal
-                         * name : 辽宁共青团的微博视频
-                         * stream_url : http://f.video.weibocdn.com/S12nogEolx07CORvGMco01041201kLPJ0E010.mp4?label=mp4_ld&template=640x360.25.0&trans_finger=40a32e8439c5409a63ccf853562a60ef&Expires=1589470110&ssig=HT8TE%2BfeAx&KID=unistore,video
-                         * stream_url_hd : http://f.video.weibocdn.com/DD9tNv6Alx07CORvYf0k01041201uP8I0E010.mp4?label=mp4_hd&template=640x360.25.0&trans_finger=62b30a3f061b162e421008955c73f536&Expires=1589470110&ssig=ersz4czV90&KID=unistore,video
-                         * h5_url : https://video.weibo.com/show?fid=1034:4498269817208850
-                         * mp4_sd_url : http://f.video.weibocdn.com/S12nogEolx07CORvGMco01041201kLPJ0E010.mp4?label=mp4_ld&template=640x360.25.0&trans_finger=40a32e8439c5409a63ccf853562a60ef&Expires=1589470110&ssig=HT8TE%2BfeAx&KID=unistore,video
-                         * mp4_hd_url : http://f.video.weibocdn.com/DD9tNv6Alx07CORvYf0k01041201uP8I0E010.mp4?label=mp4_hd&template=640x360.25.0&trans_finger=62b30a3f061b162e421008955c73f536&Expires=1589470110&ssig=ersz4czV90&KID=unistore,video
-                         * h265_mp4_hd :
-                         * h265_mp4_ld :
-                         * inch_4_mp4_hd :
-                         * inch_5_mp4_hd :
-                         * inch_5_5_mp4_hd :
-                         * mp4_720p_mp4 :
-                         * hevc_mp4_720p :
-                         * prefetch_type : 1
-                         * prefetch_size : 262144
-                         * act_status : 1
-                         * protocol : general,dash
-                         * media_id : 4498269817208850
-                         * origin_total_bitrate : 0
-                         * duration : 796
-                         * next_title : 【泪目！13分钟的中国抗疫长卷，看到你的故事了吗？】一声声，一幕幕，都是我们共同的经历。致敬每一个战“疫”英雄！（人民日报）#网友全英文解读中国抗疫# ​
-                         * play_completion_actions : [{"type":"1","icon":"http://img.t.sinajs.cn/t6/style/images/face/feed_c_r.png","text":"重播","link":"","btn_code":1000,"show_position":1,"actionlog":{"oid":"2304444498269817208850","act_code":1221,"act_type":0,"source":"video"}}]
-                         * video_publish_time : 1587954587
-                         * play_loop_type : 0
-                         * author_mid : 4498270174769898
-                         * author_name : 辽宁共青团
-                         * is_playlist : 1
-                         * get_playlist_id : 4324500519498133
-                         * extra_info : {"sceneid":"feed"}
-                         * has_recommend_video : 1
-                         * video_download_strategy : {"abandon_download":0}
-                         * jump_to : 3
-                         * online_users : 9万次观看
-                         * online_users_number : 98361
-                         * ttl : 3600
-                         * storage_type : oss
-                         * is_keep_current_mblog : 0
-                         */
 
                         private String video_orientation;
                         private String name;
